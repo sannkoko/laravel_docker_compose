@@ -1,0 +1,55 @@
+version: "3.8"
+
+networks:
+  uniq:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.100.0/24
+
+services:
+
+  nginx.uniq:
+    build:
+      context: ./
+      dockerfile: nginx.dockerfile
+    image: nginx.uniq
+    container_name: nginx.uniq
+    volumes:
+      - "./nginx/uniq_conf:/etc/nginx/conf.d/"
+      - "./code/phpinfo:/var/www/html/phpinfo"
+      - "./code/demo:/var/www/html/demo"
+      - "/etc/letsencrypt/:/etc/letsencrypt/"
+      - "./logs/nginx:/var/log/nginx"
+    networks:
+      uniq:
+        ipv4_address: 172.16.100.202
+    ports:
+      - "80"
+      - "443"
+
+  app.uniq:
+    build:
+      context: ./
+      dockerfile: php8.1-fpm.dockerfile
+    image: app.uniq
+    container_name: app.uniq
+    networks:
+      uniq:
+        ipv4_address: 172.16.100.100
+    ports:
+      - "9000"
+
+  demo.uniq:
+    image: app.uniq
+    container_name: demo.uniq
+    volumes:
+      - "./code/phpinfo:/var/www/html/phpinfo"
+      - "./code/demo:/var/www/html/demo"
+      - "./php_ini/php.ini:/usr/local/etc/php/php.ini"
+      - "./logs/php:/var/log/php"
+    networks:
+      uniq:
+        ipv4_address: 172.16.100.101
+    ports:
+      - "9000"
