@@ -1,0 +1,44 @@
+# -------------------------
+# 1. Environment & Secrets
+# -------------------------
+.env
+.env.*
+*.key
+*.pem
+
+# -------------------------
+# 2. Laravel Files
+# -------------------------
+/vendor
+/node_modules
+
+# Storage (keep structure, ignore contents except placeholders)
+public/storage
+storage/*.key
+storage/*.pem
+storage/app/*
+!storage/app/public
+storage/framework/*
+!storage/framework/.gitignore
+storage/logs/*
+*.log
+
+# -------------------------
+# 3. Docker & Build Artifacts
+# -------------------------
+# (Ignore if you don't want local overrides or ephemeral volumes tracked)
+docker-compose.override.yml
+docker/data/
+docker/volumes/
+.docker/
+docker/build/
+docker/tmp/
+
+# -------------------------
+# 4. System & Editor Files
+# -------------------------
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
