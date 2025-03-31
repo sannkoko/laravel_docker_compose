@@ -13,6 +13,9 @@ services:
       dockerfile: nginx.dockerfile
     image: nginx.app
     container_name: nginx.app
+    depends_on:
+      app.app:
+        condition: service_started
     volumes:
       - "./nginx/app_conf:/etc/nginx/conf.d/"
       - "./code/phpinfo:/var/www/html/phpinfo"
@@ -26,24 +29,29 @@ services:
       - "80"
       - "443"
 
-  app.app:
+  image.app:
     build:
       context: ./
-      dockerfile: php8.1-fpm.dockerfile
-    image: app.app
-    container_name: app.app
+      dockerfile: php8.3-fpm.dockerfile
+    image: image.app
+    container_name: image.app
     networks:
       app:
         ipv4_address: 172.16.100.100
     ports:
       - "9000"
 
-  demo.app:
+  app.app:
     image: app.app
-    container_name: demo.app
+    container_name: app.app
+    depends_on:
+      mariadb.app:
+        # This ensures phpMyAdmin starts only after the 'mariadb' container is running
+        # If using healthchecks, you could do: condition: service_healthy
+        condition: service_started 
     volumes:
       - "./code/phpinfo:/var/www/html/phpinfo"
-      - "./code/demo:/var/www/html/demo"
+      - "./code/app:/var/www/html/app"
       - "./php_ini/php.ini:/usr/local/etc/php/php.ini"
       - "./logs/php:/var/log/php"
     networks:
@@ -75,6 +83,11 @@ services:
     environment:
       PMA_HOST: mariadb.app
       PMA_PASSWORD: password
+    depends_on:
+      mariadb.app:
+        # This ensures phpMyAdmin starts only after the 'mariadb' container is running
+        # If using healthchecks, you could do: condition: service_healthy
+        condition: service_started    
     networks:
       app:
         ipv4_address: 172.16.100.103
