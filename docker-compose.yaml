@@ -66,6 +66,9 @@ services:
       dockerfile: php-node.dockerfile
     image: php-node.app
     container_name: php-node.app
+    depends_on:
+      app.app:
+        condition: service_started 
     volumes:
       - "./code/:/var/www/html/"
     working_dir: /var/www/html
