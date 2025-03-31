@@ -60,6 +60,23 @@ services:
     ports:
       - "9000"
 
+  php-node:
+    build:
+      context: .
+      dockerfile: php-node.dockerfile
+    image: php-node.app
+    container_name: php-node.app
+    volumes:
+      - "./code/:/var/www/html/"
+    working_dir: /var/www/html
+#    command: npm run watch
+#    command: tail -f /dev/null
+    networks:
+      app:
+        ipv4_address: 172.16.100.102
+    ports:
+      - "9000"
+
   mariadb.app:
     image: mariadb:latest
     container_name: mariadb.app
@@ -70,7 +87,7 @@ services:
 #      MYSQLD_ARGS: "--bind-address=0.0.0.0, --sql_mode='NO_ENGINE_SUBSTITUTION'"
     networks:
       app:
-        ipv4_address: 172.16.100.102
+        ipv4_address: 172.16.100.103
     volumes:
       - "./logs/mariadb:/var/log/mariadb"
       - "./mariadb/data:/var/lib/mysql"
@@ -90,6 +107,6 @@ services:
         condition: service_started    
     networks:
       app:
-        ipv4_address: 172.16.100.103
+        ipv4_address: 172.16.100.104
     ports:
       - "80"
