@@ -1,7 +1,7 @@
 version: "3.8"
 
 networks:
-  uniq:
+  app:
     driver: bridge
     ipam:
       config:
@@ -9,61 +9,61 @@ networks:
 
 services:
 
-  nginx.uniq:
+  nginx.app:
     build:
       context: ./
       dockerfile: nginx.dockerfile
-    image: nginx.uniq
-    container_name: nginx.uniq
+    image: nginx.app
+    container_name: nginx.app
     volumes:
-      - "./nginx/uniq_conf:/etc/nginx/conf.d/"
+      - "./nginx/app_conf:/etc/nginx/conf.d/"
       - "./code/phpinfo:/var/www/html/phpinfo"
       - "./code/demo:/var/www/html/demo"
       - "/etc/letsencrypt/:/etc/letsencrypt/"
       - "./logs/nginx:/var/log/nginx"
     networks:
-      uniq:
+      app:
         ipv4_address: 172.16.100.202
     ports:
       - "80"
       - "443"
 
-  app.uniq:
+  app.app:
     build:
       context: ./
       dockerfile: php8.1-fpm.dockerfile
-    image: app.uniq
-    container_name: app.uniq
+    image: app.app
+    container_name: app.app
     networks:
-      uniq:
+      app:
         ipv4_address: 172.16.100.100
     ports:
       - "9000"
 
-  demo.uniq:
-    image: app.uniq
-    container_name: demo.uniq
+  demo.app:
+    image: app.app
+    container_name: demo.app
     volumes:
       - "./code/phpinfo:/var/www/html/phpinfo"
       - "./code/demo:/var/www/html/demo"
       - "./php_ini/php.ini:/usr/local/etc/php/php.ini"
       - "./logs/php:/var/log/php"
     networks:
-      uniq:
+      app:
         ipv4_address: 172.16.100.101
     ports:
       - "9000"
 
-  mariadb.uniq:
+  mariadb.app:
     image: mariadb:latest
-    container_name: mariadb.uniq
+    container_name: mariadb.app
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_INITDB_SKIP_TZINFO: "yes"
       MYSQLD_ARGS: "--bind-address=0.0.0.0"
 #      MYSQLD_ARGS: "--bind-address=0.0.0.0, --sql_mode='NO_ENGINE_SUBSTITUTION'"
     networks:
-      uniq:
+      app:
         ipv4_address: 172.16.100.102
     volumes:
       - "./logs/mariadb:/var/log/mariadb"
@@ -71,14 +71,14 @@ services:
     ports:
       - "3306"
 
-  phpmyadmin.uniq:
+  phpmyadmin.app:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin.uniq
+    container_name: phpmyadmin.app
     environment:
-      PMA_HOST: mariadb.uniq
+      PMA_HOST: mariadb.app
       PMA_PASSWORD: password
     networks:
-      uniq:
+      app:
         ipv4_address: 172.16.100.103
     ports:
       - "80"
