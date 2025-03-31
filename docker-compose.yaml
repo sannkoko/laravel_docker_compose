@@ -18,7 +18,7 @@ services:
     volumes:
       - "./nginx/app_conf:/etc/nginx/conf.d/"
       - "./code/phpinfo:/var/www/html/phpinfo"
-      - "./code/demo:/var/www/html/demo"
+      - "./code/app:/var/www/html/app"
       - "/etc/letsencrypt/:/etc/letsencrypt/"
       - "./logs/nginx:/var/log/nginx"
     networks:
