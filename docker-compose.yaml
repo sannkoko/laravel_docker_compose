@@ -73,7 +73,7 @@ services:
       - "./code/:/var/www/html/"
     working_dir: /var/www/html
 #    command: npm run watch
-#    command: tail -f /dev/null
+    command: tail -f /dev/null
     networks:
       app:
         ipv4_address: 172.16.100.102
