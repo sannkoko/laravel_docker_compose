@@ -13,9 +13,10 @@ services:
       dockerfile: nginx.dockerfile
     image: nginx.test
     container_name: nginx.test
-    depends_on:
-      app.test:
-        condition: service_started
+    <<: *common_hosts
+    # depends_on:
+    #   app.test:
+    #     condition: service_started
     volumes:
       - "./nginx/app_conf:/etc/nginx/conf.d/"
       - "./code/phpinfo:/var/www/html/phpinfo"
@@ -44,6 +45,7 @@ services:
   app.test:
     image: image.test
     container_name: app.test
+    <<: *common_hosts
     depends_on:
       mariadb.test:
         # This ensures phpMyAdmin starts only after the 'mariadb' container is running
@@ -66,6 +68,7 @@ services:
       dockerfile: php-node.dockerfile
     image: php-node.test
     container_name: php-node.test
+    <<: *common_hosts
     # depends_on:
     #   app.test:
     #     condition: service_started 
