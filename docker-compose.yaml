@@ -27,8 +27,8 @@ services:
       app:
         ipv4_address: 172.16.100.202
     ports:
-      - "80"
-      - "443"
+      - "80:80"
+      - "443:443"
 
   image.test:
     build:
