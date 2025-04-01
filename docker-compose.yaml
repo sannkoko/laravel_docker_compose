@@ -7,14 +7,14 @@ networks:
 
 services:
 
-  nginx.app:
+  nginx.test:
     build:
       context: ./
       dockerfile: nginx.dockerfile
-    image: nginx.app
-    container_name: nginx.app
+    image: nginx.test
+    container_name: nginx.test
     depends_on:
-      app.app:
+      app.test:
         condition: service_started
     volumes:
       - "./nginx/app_conf:/etc/nginx/conf.d/"
@@ -29,23 +29,23 @@ services:
       - "80"
       - "443"
 
-  image.app:
+  image.test:
     build:
       context: ./
       dockerfile: php8.3-fpm.dockerfile
-    image: image.app
-    container_name: image.app
+    image: image.test
+    container_name: image.test
     networks:
       app:
         ipv4_address: 172.16.100.100
     ports:
       - "9000"
 
-  app.app:
-    image: image.app
-    container_name: app.app
+  app.test:
+    image: image.test
+    container_name: app.test
     depends_on:
-      mariadb.app:
+      mariadb.test:
         # This ensures phpMyAdmin starts only after the 'mariadb' container is running
         # If using healthchecks, you could do: condition: service_healthy
         condition: service_started 
@@ -64,10 +64,10 @@ services:
     build:
       context: .
       dockerfile: php-node.dockerfile
-    image: php-node.app
-    container_name: php-node.app
+    image: php-node.test
+    container_name: php-node.test
     # depends_on:
-    #   app.app:
+    #   app.test:
     #     condition: service_started 
     volumes:
       - "./code/:/var/www/html/"
@@ -80,9 +80,9 @@ services:
     ports:
       - "9000"
 
-  mariadb.app:
+  mariadb.test:
     image: mariadb:latest
-    container_name: mariadb.app
+    container_name: mariadb.test
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_INITDB_SKIP_TZINFO: "yes"
@@ -97,14 +97,14 @@ services:
     ports:
       - "3306"
 
-  phpmyadmin.app:
+  phpmyadmin.test:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin.app
+    container_name: phpmyadmin.test
     environment:
-      PMA_HOST: mariadb.app
+      PMA_HOST: mariadb.test
       PMA_PASSWORD: password
     depends_on:
-      mariadb.app:
+      mariadb.test:
         # This ensures phpMyAdmin starts only after the 'mariadb' container is running
         # If using healthchecks, you could do: condition: service_healthy
         condition: service_started    
