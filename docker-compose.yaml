@@ -13,7 +13,7 @@ services:
       dockerfile: nginx.dockerfile
     image: nginx.test
     container_name: nginx.test
-    <<: *common_hosts
+    # <<: *common_hosts
     # depends_on:
     #   app.test:
     #     condition: service_started
