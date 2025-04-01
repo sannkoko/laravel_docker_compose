@@ -16,6 +16,7 @@ docker-compose.override.yml
 ./code
 ./logs
 ./mariadb
+./nginx
 
 
 # -------------------------
