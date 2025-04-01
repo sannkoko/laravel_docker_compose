@@ -45,7 +45,7 @@ services:
   app.test:
     image: image.test
     container_name: app.test
-    <<: *common_hosts
+    # <<: *common_hosts
     depends_on:
       mariadb.test:
         # This ensures phpMyAdmin starts only after the 'mariadb' container is running
@@ -68,7 +68,7 @@ services:
       dockerfile: php-node.dockerfile
     image: php-node.test
     container_name: php-node.test
-    <<: *common_hosts
+    # <<: *common_hosts
     # depends_on:
     #   app.test:
     #     condition: service_started 
