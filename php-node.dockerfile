@@ -1,5 +1,5 @@
 # Use the existing PHP + Composer image as the base
-FROM image.app:latest
+FROM image.test:latest
 
 # Install Node.js and npm
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
